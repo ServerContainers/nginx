@@ -25,7 +25,8 @@ All options for the OpenSSL Stuff
     * multiple variables/confgurations possible by adding unique configname to NGINX_CONFIG_
     * adds a new nginx configuration
     * __server\_name__ is required
-    * example: "server {server_name localhost; location / {root /data; index index.html;}}"
+    * example:
+        * "server {server_name localhost; location / {root /data; index index.html;}}"
     * by default http redirects to ssl, ssl options get injected
 
 to get an a+ rating at the qualys ssl test you need to set the __Strict-Transport-Security__
@@ -35,6 +36,12 @@ inside your nginx configuration like this:
     add_header Strict-Transport-Security "max-age=31536000";
     # apply also on subdomains
     add_header Strict-Transport-Security "max-age=31536000; includeSubdomains";
+
+* __NGINX\_RAW\_CONFIG\_myconfigname__
+    * multiple variables/confgurations possible by adding unique configname to NGINX_RAW_CONFIG_
+    * adds a new nginx configuration without any modification
+    * example:
+        * "server {listen 80; listen [::]:80; server_name example.com; return 301 https://www.example.com;}"
 
 ### HTACCESS
 

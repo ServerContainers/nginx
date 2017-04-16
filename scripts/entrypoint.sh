@@ -52,6 +52,19 @@ if [ ! -f "$INITALIZED" ]; then
   done
 
   ##
+  # NGINX RAW Config ENVs
+  ##
+  for I_CONF in "$(env | grep '^NGINX_RAW_CONFIG_')"
+  do
+    rm /etc/nginx/conf.d/default.conf 2> /dev/null
+
+    CONFD_CONF_NAME=$(echo "$I_CONF" | cut -d'=' -f1 | sed 's/NGINX_RAW_CONFIG_//g' | tr '[:upper:]' '[:lower:]')
+    CONFD_CONF_VALUE=$(echo "$I_CONF" | sed 's/^[^=]*=//g')
+
+    echo "$CONFD_CONF_VALUE" >> "/conf/RAW_$CONFD_CONF_NAME.conf"
+  done
+
+  ##
   # NGINX Config ENVs
   ##
   for I_CONF in "$(env | grep '^NGINX_CONFIG_')"
