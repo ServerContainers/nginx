@@ -3,27 +3,14 @@
 cat <<EOF
 ################################################################################
 
-Welcome to the servercontainers/nginx container
-
-IMPORTANT:
-  IF you use SSL inside your personal NGINX-config,
-  you might add the Strict-Transport-Security header like:
-
-    # only this domain
-    add_header Strict-Transport-Security "max-age=31536000";
-    # apply also on subdomains
-    add_header Strict-Transport-Security "max-age=31536000; includeSubdomains";
-
-  to your config.
-
-  After this you should gain a A+ Grade on the Qualys SSL Test
+Welcome to the servercontainers/nginx
 
 ################################################################################
 
 EOF
 
 
-INITALIZED="/conf/initialized"
+INITALIZED="/.initialized"
 
 if [ ! -f "$INITALIZED" ]; then
   echo ">> CONTAINER: starting initialisation"
@@ -53,10 +40,10 @@ if [ ! -f "$INITALIZED" ]; then
   ##
   # HTACCESS
   ##
-  for I_ACCOUNT in $(env | grep '^HTACCESS_ACCOUNT_')
+  for I_ACCOUNT in "$(env | grep '^HTACCESS_ACCOUNT_')"
   do
     ACCOUNT_NAME=$(echo "$I_ACCOUNT" | cut -d'=' -f1 | sed 's/HTACCESS_ACCOUNT_//g' | tr '[:upper:]' '[:lower:]')
-    ACCOUNT_PASSWORD=$(echo "$I_ACCOUNT" | cut -d'=' -f2)
+    ACCOUNT_PASSWORD=$(echo "$I_ACCOUNT" | sed 's/^[^=]*=//g')
 
     echo ">> HTACCESS: adding account: $ACCOUNT_NAME"
     echo -e "$ACCOUNT_PASSWORD\n$ACCOUNT_PASSWORD" | htpasswd $(if [ ! -e /conf/auth.htpasswd ]; then echo '-c'; fi) /conf/auth.htpasswd "$ACCOUNT_NAME"
@@ -67,12 +54,12 @@ if [ ! -f "$INITALIZED" ]; then
   ##
   # NGINX Config ENVs
   ##
-  for I_CONF in $(env | grep '^NGINX_CONFIG_')
+  for I_CONF in "$(env | grep '^NGINX_CONFIG_')"
   do
     rm /etc/nginx/conf.d/default.conf 2> /dev/null
 
     CONFD_CONF_NAME=$(echo "$I_CONF" | cut -d'=' -f1 | sed 's/NGINX_CONFIG_//g' | tr '[:upper:]' '[:lower:]')
-    CONFD_CONF_VALUE=$(echo "$I_CONF" | cut -d'=' -f2)
+    CONFD_CONF_VALUE=$(echo "$I_CONF" | sed 's/^[^=]*=//g')
 
     SERVER_NAMES=$(echo "$CONFD_CONF_VALUE" | sed -e 's/.*server_name \(.*\)/\1/' -e 's/;.*//g')
     SERVER_NAME=$(echo "$SERVER_NAMES" | awk '{print $1}')
