@@ -1,3 +1,3 @@
 #!/bin/sh
-ps aux | grep nginx
+ps aux | grep [n]ginx
 exit $?
