@@ -73,3 +73,18 @@ All options for the OpenSSL Stuff
     * no default - needed only if you don't trust my shipped 4096 version.
     * if set a new one with given size is generated
     * only use a number as value
+
+# Specials
+
+## Docker Registry proxy with Basic Auth
+
+You can indeed use this container as a Docker Registry Proxy with Basic Authentication.
+Just add some Accounts with the __HTACCESS\_ACCOUNT\_username__ variables and take a look at the following __NGINX\_CONFIG\_myconfigname__ configuration.
+
+    HTACCESS_ACCOUNT_marvin=MyRegistRyPasSwOrD
+    NGINX_CONFIG_myDockerRegistry="upstream docker-registry {server registry:5000;} server {server_name registry.example.com; include /etc/nginx/snippets/docker-registry-proxy.conf;}"
+
+You need to specify the docker registry upstream, add a server_name necessary for the certificate generation.
+Most importantly include the file __include /etc/nginx/snippets/docker-registry-proxy.conf;__ inside your server statement.
+
+Thats all - now you have a working docker registry proxy with ssl, basic auth!
