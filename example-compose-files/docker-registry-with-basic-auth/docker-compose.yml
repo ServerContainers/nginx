@@ -18,7 +18,7 @@ services:
     image: registry:2
     restart: always
     volumes:
-      ./data:/var/lib/registry
+      - ./data:/var/lib/registry
     networks:
       - registry-net
 
