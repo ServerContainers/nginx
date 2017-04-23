@@ -2,11 +2,10 @@ version: '3'
 
 services:
   nginx:
-    build: .
     image: servercontainers/nginx
     restart: always
     environment:
-      NGINX_CONFIG_registry: upstream docker-registry {server registry:5000;} server {server_name registry.example.com; include /etc/nginx/snippets/docker-registry-proxy.conf;}
+      NGINX_CONFIG_registry: upstream docker-registry {server registry:5000;} server {server_name registry.example.tld; include /etc/nginx/snippets/docker-registry-proxy.conf;}
       HTACCESS_ACCOUNT_bob: pa55word
     ports:
       - 80:80
