@@ -31,7 +31,7 @@ RUN apk update \
  && wget -O /iana-tlds.txt "http://data.iana.org/TLD/tlds-alpha-by-domain.txt" \
  \
  \
- && openssl dhparam -out /etc/nginx/dh.pem 512 #4096
+ && openssl dhparam -out /etc/nginx/dh.pem 4096
 
 VOLUME ["/certs", "/data", "/conf"]
 EXPOSE 80 443
