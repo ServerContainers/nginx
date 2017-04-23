@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  nginx:
+    build: .
+    image: servercontainers/nginx
+    restart: always
+    environment:
+      NGINX_CONFIG_phpmyadmin: server {server_name localhost; proxy_ssl_verify off; location / {return 301 https://localhost/phpmyadmin/;} location /phpmyadmin {proxy_pass https://phpmyadmin/phpmyadmin;}}
+      HTACCESS_ACCOUNT_bob: pa55word
+    ports:
+      - 80:80
+      - 443:443
+    networks:
+      - web-test
+
+  phpmyadmin:
+    image: marvambass/phpmyadmin
+    restart: always
+    environment:
+      PHPMYADMIN_MYSQL_HOST: mysql
+      PHPMYADMIN_RELATIVE_URL_ROOT: /phpmyadmin
+    networks:
+      - web-test
+
+  mysql:
+    image: servercontainers/mysql
+    restart: always
+    environment:
+      ADMIN_USER: admin
+      ADMIN_PASSWORD: password
+      BACKUP_ENABLED: enable
+      DB_NAME: exampledb
+      DB_USER: exampleuser
+      DB_PASSWORD: examplepassword
+    networks:
+      - web-test
+
+networks:
+  web-test:
+    driver: bridge

@@ -15,6 +15,13 @@ View in Docker Registry [servercontainers/nginx](https://registry.hub.docker.com
 
 View in GitHub [ServerContainers/nginx](https://github.com/ServerContainers/nginx)
 
+## Usage
+
+You can try this container with the provided _docker\_compose.yml_ which starts an mysql container with phpmyadmin
+and adds a reverse proxy location to the nginx.
+
+So you can open the phpmyadmin SSL protected at https://localhost/phpmyadmin/
+
 ## Environment variables and defaults
 
 ### NGINX
