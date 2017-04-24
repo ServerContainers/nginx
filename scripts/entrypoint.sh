@@ -120,9 +120,9 @@ if [ ! -f "$INITALIZED" ]; then
   fi
 
   ##
-  # Default page generation
+  # Default certificate generation
   ##
-  if [ -e "/etc/nginx/conf.d/default.conf" ] && [ ! -e "/data/index.html" ]
+  if [ -e "/etc/nginx/conf.d/default.conf" ] && [ ! -e "/certs/cert.pem" ]
   then
     echo ">> OPENSSL SelfSigned: generating default self signed cert for localhost"
     openssl req -x509 -newkey rsa:4096 \
@@ -131,7 +131,13 @@ if [ ! -f "$INITALIZED" ]; then
     -keyout "/certs/key.pem" \
     -out "/certs/cert.pem" \
     -nodes -sha256
+  fi
 
+  ##
+  # Default page generation
+  ##
+  if [ -e "/etc/nginx/conf.d/default.conf" ] && [ ! -e "/data/index.html" ]
+  then
     echo ">> DATA: generating initial index.html"
     echo '<html><body><h1>ServerContainers/nginx</h1><a href="https://github.com/ServerContainers/nginx">ServerContainers/nginx @ GitHub.com</a></body></html>' > /data/index.html
   fi
