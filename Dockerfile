@@ -16,7 +16,7 @@ RUN apk update \
  && sed -i 's,include /etc,include /conf/*.conf;\n    include /etc,g' /etc/nginx/nginx.conf \
  \
  \
- && echo -e 'server {\n  listen 80;\n  listen 443 ssl;\n\n  server_name localhost;\n\n  ssl on;\n  ssl_certificate /certs/cert.pem;\n  ssl_certificate_key /certs/key.pem;\n\n  location / {root /data; index index.html;}\n\n}' > /etc/nginx/conf.d/default.conf \
+ && echo -e 'server {\n  listen 80;\n  listen 443 ssl;\n\n  server_name localhost;\n\n  root /data;\n  index index.html;\n  ssl on;\n  ssl_certificate /certs/cert.pem;\n  ssl_certificate_key /certs/key.pem;\n\n  location / {try_files $uri $uri/ =404;}\n\n}' > /etc/nginx/conf.d/default.conf \
  \
  \
  && if uname -m | grep arm; then export ACME_URL='https://github.com/google/acme/releases/download/1.1.1/acme-linux-arm'; \
