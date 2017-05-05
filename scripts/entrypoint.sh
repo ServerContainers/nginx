@@ -10,7 +10,7 @@ Welcome to the servercontainers/nginx
 EOF
 
 
-INITALIZED="/data/.initialized"
+INITALIZED="/.entrypoint-initialized"
 
 if [ ! -f "$INITALIZED" ]; then
   echo ">> CONTAINER: starting initialisation"
