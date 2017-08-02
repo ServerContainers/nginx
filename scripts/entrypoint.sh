@@ -40,9 +40,7 @@ if [ ! -f "$INITALIZED" ]; then
   ##
   # HTACCESS
   ##
-  if env | grep '^HTACCESS_ACCOUNT_'
-  then
-    for I_ACCOUNT in "$(env | grep '^HTACCESS_ACCOUNT_')"
+  env | grep '^HTACCESS_ACCOUNT_' | while read I_ACCOUNT
     do
       ACCOUNT_NAME=$(echo "$I_ACCOUNT" | cut -d'=' -f1 | sed 's/HTACCESS_ACCOUNT_//g' | tr '[:upper:]' '[:lower:]')
       ACCOUNT_PASSWORD=$(echo "$I_ACCOUNT" | sed 's/^[^=]*=//g')
@@ -52,14 +50,11 @@ if [ ! -f "$INITALIZED" ]; then
 
       unset $(echo "$I_ACCOUNT" | cut -d'=' -f1)
     done
-  fi
 
   ##
   # NGINX RAW Config ENVs
   ##
-  if env | grep '^NGINX_RAW_CONFIG_'
-  then
-    for I_CONF in "$(env | grep '^NGINX_RAW_CONFIG_')"
+  env | grep '^NGINX_RAW_CONFIG_' | while read I_CONF
     do
       rm /etc/nginx/conf.d/default.conf 2> /dev/null
 
@@ -68,14 +63,11 @@ if [ ! -f "$INITALIZED" ]; then
 
       echo "$CONFD_CONF_VALUE" >> "/conf/RAW_$CONFD_CONF_NAME.conf"
     done
-  fi
 
   ##
   # NGINX Config ENVs
   ##
-  if env | grep '^NGINX_CONFIG_'
-  then
-    for I_CONF in "$(env | grep '^NGINX_CONFIG_')"
+  env | grep '^NGINX_CONFIG_' | while read I_CONF
     do
       rm /etc/nginx/conf.d/default.conf 2> /dev/null
 
@@ -117,7 +109,6 @@ if [ ! -f "$INITALIZED" ]; then
       echo "server{listen 80; listen [::]:80; include /etc/nginx/snippets/letsencrypt-acme-challenge.conf; server_name $SERVER_NAMES; return 301 https://$SERVER_NAME;}" > "/conf/$CONFD_CONF_NAME.conf"
       echo "$CONFD_CONF_VALUE" | sed 's/server_name/listen 443 ssl; ssl on; ssl_certificate \/certs\/'"$SERVER_NAME"'.crt; ssl_certificate_key \/certs\/'"$SERVER_NAME"'.key; server_name/g' >> "/conf/$CONFD_CONF_NAME.conf"
     done
-  fi
 
   ##
   # Default certificate generation
