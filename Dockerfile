@@ -1,6 +1,8 @@
 FROM nginx:alpine
 LABEL github.user="ServerContainers"
 
+ENV ACME_CONFIG=/root/.config/acme
+
 RUN apk update \
  && apk add wget \
             openssl \
