@@ -6,7 +6,6 @@ ENV ACME_CONFIG=/root/.config/acme
 RUN apk update \
  && apk add wget \
             openssl \
-            apache2-utils \
             ca-certificates \
  && rm -f /var/cache/apk/* \
  \
