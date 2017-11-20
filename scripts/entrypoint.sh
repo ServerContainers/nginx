@@ -44,9 +44,17 @@ if [ ! -f "$INITALIZED" ]; then
     do
       ACCOUNT_NAME=$(echo "$I_ACCOUNT" | cut -d'=' -f1 | sed 's/HTACCESS_ACCOUNT_//g' | tr '[:upper:]' '[:lower:]')
       ACCOUNT_PASSWORD=$(echo "$I_ACCOUNT" | sed 's/^[^=]*=//g')
-
-      echo ">> HTACCESS: adding account: $ACCOUNT_NAME"
-      echo "$ACCOUNT_PASSWORD" | htpasswd -i $(if [ ! -e /conf/auth.htpasswd ]; then echo '-c'; fi) /conf/auth.htpasswd "$ACCOUNT_NAME"
+      
+      if [ -z $(echo $ACCOUNT_PASSWORD | sed 's/^\$*\$.*//g') ]
+        echo ">> HTACCESS: adding account (hash provided): $ACCOUNT_NAME"
+        PASSWORD_HASHED="$ACCOUNT_PASSWORD"
+      else
+        echo ">> HTACCESS: adding account (SHA-512 hashed): $ACCOUNT_NAME"
+        PASSWORD_HASHED=$(echo "$ACCOUNT_PASSWORD" | mkpasswd -m sha-512)
+      if
+      
+      sed -i '/^'"$ACCOUNT_NAME"':/d' /conf/auth.htpasswd
+      echo "$ACCOUNT_NAME"":""$PASSWORD_HASHED" >> /conf/auth.htpasswd
 
       unset $(echo "$I_ACCOUNT" | cut -d'=' -f1)
     done
