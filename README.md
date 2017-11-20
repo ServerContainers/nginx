@@ -55,7 +55,7 @@ inside your nginx configuration like this:
 * __HTACCESS\_ACCOUNT\_username__
     * multiple variables/accounts possible
     * adds a new htaccess account with the given username and the env value as password (SHA-512 Hashed)
-    * password can be a hash created with `mkpasswd` e.g. created with `mkpasswd -m sha-512`
+    * password can be a hash created with `mkpasswd` e.g. created with `mkpasswd -m sha-512` (escape `$` with `$$` in `docker-compose.yml`)
     * htaccess file will be saved at __/conf/auth.htpasswd__
 
 to enable authentication add the following to your nginx config _(inside or outside the location tag)_:
