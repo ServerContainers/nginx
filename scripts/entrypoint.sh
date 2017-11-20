@@ -52,7 +52,7 @@ if [ ! -f "$INITALIZED" ]; then
       else
         echo ">> HTACCESS: adding account (SHA-512 hashed): $ACCOUNT_NAME"
         PASSWORD_HASHED=$(echo "$ACCOUNT_PASSWORD" | mkpasswd -m sha-512)
-      if
+      fi
       
       sed -i '/^'"$ACCOUNT_NAME"':/d' /conf/auth.htpasswd
       echo "$ACCOUNT_NAME"":""$PASSWORD_HASHED" >> /conf/auth.htpasswd
