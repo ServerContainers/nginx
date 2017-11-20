@@ -46,6 +46,7 @@ if [ ! -f "$INITALIZED" ]; then
       ACCOUNT_PASSWORD=$(echo "$I_ACCOUNT" | sed 's/^[^=]*=//g')
       
       if [ -z $(echo $ACCOUNT_PASSWORD | sed 's/^\$*\$.*//g') ]
+      then
         echo ">> HTACCESS: adding account (hash provided): $ACCOUNT_NAME"
         PASSWORD_HASHED="$ACCOUNT_PASSWORD"
       else
