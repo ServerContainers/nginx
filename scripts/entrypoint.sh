@@ -54,7 +54,7 @@ if [ ! -f "$INITALIZED" ]; then
         PASSWORD_HASHED=$(echo "$ACCOUNT_PASSWORD" | mkpasswd -m sha-512)
       fi
       
-      sed -i '/^'"$ACCOUNT_NAME"':/d' /conf/auth.htpasswd
+      sed -i '/^'"$ACCOUNT_NAME"':/d' /conf/auth.htpasswd 2>/dev/null
       echo "$ACCOUNT_NAME"":""$PASSWORD_HASHED" >> /conf/auth.htpasswd
 
       unset $(echo "$I_ACCOUNT" | cut -d'=' -f1)
