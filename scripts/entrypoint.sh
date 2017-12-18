@@ -144,6 +144,12 @@ if [ ! -f "$INITALIZED" ]; then
     echo '<html><body><h1>ServerContainers/nginx</h1><a href="https://github.com/ServerContainers/nginx">ServerContainers/nginx @ GitHub.com</a></body></html>' > /data/index.html
   fi
 
+  ##
+  # Reload after cert update (sind SIGHUP to nginx)
+  ##
+  echo "cp -f /root/.config/acme/*.key /certs && cp -f /root/.config/acme/*.crt /certs" >> /usr/local/bin/update-certs.sh
+  echo "kill -1 1" >> /usr/local/bin/update-certs.sh
+
   touch "$INITALIZED"
 else
   echo ">> CONTAINER: already initialized - direct start of nginx"
