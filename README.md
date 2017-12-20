@@ -44,6 +44,11 @@ inside your nginx configuration like this:
     # apply also on subdomains
     add_header Strict-Transport-Security "max-age=31536000; includeSubdomains";
 
+* __NGINX\_HTTP\_ACTION__
+    * only works with NGINX\_CONFIG\_ configurations
+    * default value __location / {return 301 https://$SERVER_NAME;}__
+    * changes default behavior of always redirect http to https
+
 * __NGINX\_RAW\_CONFIG\_myconfigname__
     * multiple variables/confgurations possible by adding unique configname to NGINX_RAW_CONFIG_
     * adds a new nginx configuration without any modification
