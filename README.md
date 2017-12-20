@@ -49,6 +49,12 @@ inside your nginx configuration like this:
     * default value __location / {return 301 https://$SERVER_NAME;}__
     * changes default behavior of always redirect http to https
 
+* __NGINX\_HTTP\_ACTION\_myconfigname__
+    * only works for corresponding NGINX\_CONFIG\_myconfigname configuration
+    * default value __location / {return 301 https://$SERVER_NAME;}__
+    * overwrites global NGINX\_HTTP\_ACTION
+    * changes default behavior of always redirect http to https
+
 * __NGINX\_RAW\_CONFIG\_myconfigname__
     * multiple variables/confgurations possible by adding unique configname to NGINX_RAW_CONFIG_
     * adds a new nginx configuration without any modification
