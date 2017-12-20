@@ -114,8 +114,10 @@ if [ ! -f "$INITALIZED" ]; then
         -out "/certs/$SERVER_NAME.crt" \
         -nodes -sha256
       fi
-
-      echo "server{listen 80; listen [::]:80; include /etc/nginx/snippets/letsencrypt-acme-challenge.conf; server_name $SERVER_NAMES; location / {return 301 https://$SERVER_NAME;}}" > "/conf/$CONFD_CONF_NAME.conf"
+      
+      if ! echo "$CONFD_CONF_VALUE" | grep 'listen 80;' >2/dev/null >/dev/null; then
+        echo "server{listen 80; listen [::]:80; include /etc/nginx/snippets/letsencrypt-acme-challenge.conf; server_name $SERVER_NAMES; location / {return 301 https://$SERVER_NAME;}}" > "/conf/$CONFD_CONF_NAME.conf"
+      fi
       echo "$CONFD_CONF_VALUE" | sed 's/server_name/listen 443 ssl; ssl on; ssl_certificate \/certs\/'"$SERVER_NAME"'.crt; ssl_certificate_key \/certs\/'"$SERVER_NAME"'.key; server_name/g' >> "/conf/$CONFD_CONF_NAME.conf"
       
       if [ ! -f "/certs/$SERVER_NAME.crt" ] || [ ! -f "/certs/$SERVER_NAME.key" ]; then openssl req -x509 -newkey rsa:4096 -days 3 -subj "/C=XX/ST=XXXX/L=XXXX/O=XXXX/CN=$SERVER_NAME" -keyout "/certs/$SERVER_NAME.key" -out "/certs/$SERVER_NAME.crt" -nodes -sha256; fi
