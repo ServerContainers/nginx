@@ -115,8 +115,9 @@ if [ ! -f "$INITALIZED" ]; then
         -nodes -sha256
       fi
       
+      echo "" > "/conf/$CONFD_CONF_NAME.conf"
       if ! echo "$CONFD_CONF_VALUE" | grep 'listen 80;' >2/dev/null >/dev/null; then
-        echo "server{listen 80; listen [::]:80; include /etc/nginx/snippets/letsencrypt-acme-challenge.conf; server_name $SERVER_NAMES; location / {return 301 https://$SERVER_NAME;}}" > "/conf/$CONFD_CONF_NAME.conf"
+        echo "server{listen 80; listen [::]:80; include /etc/nginx/snippets/letsencrypt-acme-challenge.conf; server_name $SERVER_NAMES; location / {return 301 https://$SERVER_NAME;}}" >> "/conf/$CONFD_CONF_NAME.conf"
       fi
       echo "$CONFD_CONF_VALUE" | sed 's/server_name/listen 443 ssl; ssl on; ssl_certificate \/certs\/'"$SERVER_NAME"'.crt; ssl_certificate_key \/certs\/'"$SERVER_NAME"'.key; server_name/g' >> "/conf/$CONFD_CONF_NAME.conf"
       
