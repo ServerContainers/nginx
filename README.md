@@ -84,6 +84,10 @@ You need to accept the terms of the certificate authority, look inside to logs t
     * set this to your email to get notifications from the certificate authority
     * needs to be set to enable the ACME client
 
+* __DISABLE\_CERTIFICATE\_UPDATE__
+    * disable the auto update of certificates if set to _true_
+    * default: not set
+
 ### OpenSSL
 
 All options for the OpenSSL Stuff

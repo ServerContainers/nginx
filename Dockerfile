@@ -23,7 +23,7 @@ RUN apk update \
  && export ACME_BINARY='/usr/local/bin/acme' \
  && wget -O "$ACME_BINARY" "$ACME_URL" \
  && chmod a+x "$ACME_BINARY" \
- && mkdir -p /root/.config/acme/ \
+ && mkdir -p /root/.config/acme /conf /certs /data \
  \
  \
  && wget -O /iana-tlds.txt "http://data.iana.org/TLD/tlds-alpha-by-domain.txt" \
@@ -31,7 +31,6 @@ RUN apk update \
  \
  && openssl dhparam -out /etc/nginx/dh.pem 4096
 
-VOLUME ["/certs", "/data", "/conf"]
 EXPOSE 80 443
 
 COPY conf.d /etc/nginx/conf.d/
