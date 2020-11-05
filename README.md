@@ -6,6 +6,7 @@ _maintained by ServerContainers_
 * 2020-11-05
     * multiarch build
     * added tls 1.3 support
+    * webdav-server snipped and settings to allow huge uploads
     * now generates self signed certificates for all domains without a provided certificate
     * removed outdated Google ACME Binary and Let's Encrypt Support
         * I'd recommend to use traefik or similar software as auto let's encrypt reverse proxy
@@ -103,3 +104,12 @@ You need to specify the docker registry upstream, add a server_name necessary fo
 Most importantly include the file __include /etc/nginx/snippets/docker-registry-proxy.conf;__ inside your server statement.
 
 Thats all - now you have a working docker registry proxy with ssl, basic auth!
+
+## NGINX WebDav Server
+
+To get a WebDav Server with MacOS Support and everything, just use the following configuration with snipped.
+
+```
+    HTACCESS_ACCOUNT_marvin=MyWebDavPassword
+    NGINX_CONFIG_webdavServer="server {server_name webdav.example.com; location / { auth_basic "Restricted"; auth_basic_user_file /conf/auth.htpasswd; include /etc/nginx/snippets/webdav-server.conf;} }"
+```
