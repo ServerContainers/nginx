@@ -30,18 +30,6 @@ if [ ! -f "$INITALIZED" ]; then
   fi
 
   ##
-  # ACME (Let's Encrypt section)
-  ##
-  if [ ! -z "$SSL_ACME_REGISTER_MAIL" ] && [ ! -f "/root/.config/acme/account.json" ] && acme whoami | grep -v "mailto:$SSL_ACME_REGISTER_MAIL" 2> /dev/null > /dev/null
-  then
-    echo ">> ACME: register acme with mail: $SSL_ACME_REGISTER_MAIL"
-    echo Y | acme reg -gen "mailto:$SSL_ACME_REGISTER_MAIL"
-    echo ">> ACME: you need to accept the following terms"
-    acme whoami | grep http
-    acme update -accept
-  fi
-
-  ##
   # HTACCESS
   ##
   env | grep '^HTACCESS_ACCOUNT_' | while read I_ACCOUNT
@@ -93,37 +81,22 @@ if [ ! -f "$INITALIZED" ]; then
       TLDs=$(sh -c "for i in \$(echo \"$SERVER_NAMES\" | sed 's,\.,/,g'); do basename \$i; done | sort | uniq  | tr '[:lower:]' '[:upper:]'")
       VALID_EXTERNAL_DOMAINS=$(for I_TLD in $TLDs; do grep "^$I_TLD\$" /iana-tlds.txt 2>/dev/null >/dev/null; echo $? ; done | uniq | sort -n | head -n1)
 
-      if [ $VALID_EXTERNAL_DOMAINS -eq 0 ] && acme whoami | grep -v "mailto:$SSL_ACME_REGISTER_MAIL" 2> /dev/null > /dev/null
-      then
-        echo ">> ACME: register domains: $SERVER_NAMES"
-        
-        if [ -f "/certs/$SERVER_NAME.crt"  ]; then
-          echo " >> cert already exists"
-        else
-          echo " >> obtain cert from lets encrypt"
-          acme cert $SERVER_NAMES
-          cp -f /root/.config/acme/*.key /certs && cp -f /root/.config/acme/*.crt /certs
-        fi
+      echo ">> OPENSSL SelfSigned: generating self signed cert for $SERVER_NAMES"
 
-        echo "acme cert -s 127.0.0.1:88 $SERVER_NAMES" >> /usr/local/bin/update-certs.sh
-      else
-        echo ">> OPENSSL SelfSigned: generating self signed cert for $SERVER_NAMES"
+      cp /etc/ssl/openssl.cnf /tmp
+      echo '[ subject_alt_name ]' >> /tmp/openssl.cnf
+      echo -n 'subjectAltName = ' >> /tmp/openssl.cnf
+      for I_SSL_DNS in $(echo "$SERVER_NAMES"); do echo -n "DNS:$I_SSL_DNS, "; done | sed 's/, $//g' >> /tmp/openssl.cnf
+      echo '' >> /tmp/openssl.cnf
 
-        cp /etc/ssl/openssl.cnf /tmp
-        echo '[ subject_alt_name ]' >> /tmp/openssl.cnf
-        echo -n 'subjectAltName = ' >> /tmp/openssl.cnf
-        for I_SSL_DNS in $(echo "$SERVER_NAMES"); do echo -n "DNS:$I_SSL_DNS, "; done | sed 's/, $//g' >> /tmp/openssl.cnf
-        echo '' >> /tmp/openssl.cnf
-
-        openssl req -x509 -newkey rsa:4096 \
-        -config /tmp/openssl.cnf \
-        -extensions subject_alt_name \
-        -days 3650 \
-        -subj "/C=XX/ST=XXXX/L=XXXX/O=XXXX/CN=$SERVER_NAME" \
-        -keyout "/certs/$SERVER_NAME.key" \
-        -out "/certs/$SERVER_NAME.crt" \
-        -nodes -sha256
-      fi
+      openssl req -x509 -newkey rsa:4096 \
+      -config /tmp/openssl.cnf \
+      -extensions subject_alt_name \
+      -days 3650 \
+      -subj "/C=XX/ST=XXXX/L=XXXX/O=XXXX/CN=$SERVER_NAME" \
+      -keyout "/certs/$SERVER_NAME.key" \
+      -out "/certs/$SERVER_NAME.crt" \
+      -nodes -sha256
 
       if [ -z "$NGINX_HTTP_ACTION" ]; then
         NGINX_HTTP_ACTION="location / {return 301 https://$SERVER_NAME;}"
@@ -134,7 +107,6 @@ if [ ! -f "$INITALIZED" ]; then
         CURRENT_NGINX_HTTP_ACTION=$(env | grep '^NGINX_HTTP_ACTION_'"$CONFD_CONF_NAME"'=' | sed 's/^[^=]*=//g')
       fi
 
-      echo "server{listen 80; listen [::]:80; include /etc/nginx/snippets/letsencrypt-acme-challenge.conf; server_name $SERVER_NAMES; $CURRENT_NGINX_HTTP_ACTION}" > "/conf/$CONFD_CONF_NAME.conf"
       echo "$CONFD_CONF_VALUE" | sed 's/server_name/listen 443 ssl; ssl on; ssl_certificate \/certs\/'"$SERVER_NAME"'.crt; ssl_certificate_key \/certs\/'"$SERVER_NAME"'.key; server_name/g' >> "/conf/$CONFD_CONF_NAME.conf"
 
       if [ ! -f "/certs/$SERVER_NAME.crt" ] || [ ! -f "/certs/$SERVER_NAME.key" ]; then openssl req -x509 -newkey rsa:4096 -days 3 -subj "/C=XX/ST=XXXX/L=XXXX/O=XXXX/CN=$SERVER_NAME" -keyout "/certs/$SERVER_NAME.key" -out "/certs/$SERVER_NAME.crt" -nodes -sha256; fi
@@ -163,23 +135,9 @@ if [ ! -f "$INITALIZED" ]; then
     echo '<html><body><h1>ServerContainers/nginx</h1><a href="https://github.com/ServerContainers/nginx">ServerContainers/nginx @ GitHub.com</a></body></html>' > /data/index.html
   fi
 
-  ##
-  # Reload after cert update (sind SIGHUP to nginx)
-  ##
-  echo "cp -f /root/.config/acme/*.key /certs && cp -f /root/.config/acme/*.crt /certs" >> /usr/local/bin/update-certs.sh
-  echo "kill -1 1" >> /usr/local/bin/update-certs.sh
-
   touch "$INITALIZED"
 else
   echo ">> CONTAINER: already initialized - direct start of nginx"
-fi
-
-##
-# Update Certificates
-##
-if [ "$DISABLE_CERTIFICATE_UPDATE" != "true" ] && [ $(find /certs/*.crt | wc -l) -gt 0 ]
-then
-  sh -c "sleep 60; while true; do update-certs.sh; sleep 1d; done" &
 fi
 
 ##

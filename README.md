@@ -1,11 +1,18 @@
 # Docker production ready NGINX Container (servercontainers/nginx)
 _maintained by ServerContainers_
 
-[FAQ - All you need to know about the servercontainers Containers](https://marvin.im/docker-faq-all-you-need-to-know-about-the-marvambass-containers/)
+## Changelogs
+
+* 2020-11-05
+    * multiarch build
+    * added tls 1.3 support
+    * now generates self signed certificates for all domains without a provided certificate
+    * removed outdated Google ACME Binary and Let's Encrypt Support
+        * I'd recommend to use traefik or similar software as auto let's encrypt reverse proxy
 
 ## What is it
 
-This Dockerfile (available as ___servercontainers/nginx___) gives you a NGINX on alpine. It is also possible to configure an auto lets encrypt certificate or self signed certificate and reverse proxy mechanism.
+This Dockerfile (available as ___servercontainers/nginx___) gives you a NGINX on alpine. It also generates self signed certificates and reverse proxy mechanism.
 
 For Configuration of the Server you use environment Variables.
 
@@ -72,21 +79,6 @@ inside your nginx configuration like this:
 to enable authentication add the following to your nginx config _(inside or outside the location tag)_:
 
     auth_basic "Restricted Area"; auth_basic_user_file /conf/auth.htpasswd;
-
-
-### ACME (Googles golang Let's Encrypt Client)
-
-You need to accept the terms of the certificate authority, look inside to logs to find the URL where you get the current version.
-
-    Terms:		 https://letsencrypt.org/documents/LE-SA-v1.1.1-August-1-2016.pdf
-
-* __SSL\_ACME\_REGISTER\_MAIL__
-    * set this to your email to get notifications from the certificate authority
-    * needs to be set to enable the ACME client
-
-* __DISABLE\_CERTIFICATE\_UPDATE__
-    * disable the auto update of certificates if set to _true_
-    * default: not set
 
 ### OpenSSL
 
