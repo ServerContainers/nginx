@@ -3,6 +3,11 @@ _maintained by ServerContainers_
 
 ## Changelogs
 
+* 2020-11-17
+    * switched to `debian:buster` baseimage
+    * switched to `nginx-full` debian package
+    * fixed webdav support
+    * fixed missing folders
 * 2020-11-05
     * multiarch build
     * added tls 1.3 support
@@ -15,9 +20,11 @@ _maintained by ServerContainers_
 
 This Dockerfile (available as ___servercontainers/nginx___) gives you a NGINX on alpine. It also generates self signed certificates and reverse proxy mechanism.
 
+It uses debian package `nginx-full`.
+
 For Configuration of the Server you use environment Variables.
 
-It's based on the [nginx:alpine](https://registry.hub.docker.com/_/nginx:alpine/) Image
+It's based on the [debian:buster](https://registry.hub.docker.com/_/debian:buster/) Image
 
 View in Docker Registry [servercontainers/nginx](https://registry.hub.docker.com/u/servercontainers/nginx/)
 

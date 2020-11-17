@@ -4,7 +4,7 @@ FROM alpine AS builder
 ENV QEMU_URL https://github.com/balena-io/qemu/releases/download/v3.0.0%2Bresin/qemu-3.0.0+resin-arm.tar.gz
 RUN apk add curl && curl -L ${QEMU_URL} | tar zxvf - -C . --strip-components 1
 
-FROM arm32v7/nginx:alpine
+FROM arm32v7/debian:buster
 
 COPY --from=builder qemu-arm-static /usr/bin
 
@@ -12,24 +12,35 @@ LABEL github.user="ServerContainers"
 
 ENV PATH="/container/scripts:${PATH}"
 
-RUN apk update \
- && apk add wget \
-            openssl \
-            ca-certificates \
- && rm -f /var/cache/apk/* \
+RUN export DEBIAN_FRONTEND=noninteractive \
+ && apt-get -q -y update \
+ && apt-get -q -y install nginx-full \
+                          \
+                          wget \
+                          openssl \
+                          ca-certificates \
+                          procps \
  \
+ && apt-get -q -y clean \
+ && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* \
+ \
+ && rm /etc/nginx/sites-enabled/default \
  \
  && sed -i 's/access_log.*/access_log \/dev\/stdout;/g' /etc/nginx/nginx.conf \
  && sed -i 's/error_log.*/error_log \/dev\/stdout info;/g' /etc/nginx/nginx.conf \
  && sed -i 's/^pid/daemon off;\npid/g' /etc/nginx/nginx.conf \
  \
- && sed -i 's,include /etc,include /conf/*.conf;\n    include /etc,g' /etc/nginx/nginx.conf \
+ && sed -i 's/ssl_protocols.*//g' /etc/nginx/nginx.conf \
+ && sed -i 's/ssl_prefer_server_ciphers.*//g' /etc/nginx/nginx.conf \
+ \
+ && sed -i 's,include /etc/nginx/conf.d,include /conf/*.conf;\n        include /etc/nginx/conf.d,g' /etc/nginx/nginx.conf \
  \
  \
  && wget -O /iana-tlds.txt "http://data.iana.org/TLD/tlds-alpha-by-domain.txt" \
  \
  \
- && openssl dhparam -out /etc/nginx/dh.pem 4096
+ && openssl dhparam -out /etc/nginx/dh.pem 4096 \
+ && mkdir -p /conf /certs /data
 
 EXPOSE 80 443
 

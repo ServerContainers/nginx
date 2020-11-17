@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 cat <<EOF
 ################################################################################
@@ -14,9 +14,6 @@ INITALIZED="/.entrypoint-initialized"
 
 if [ ! -f "$INITALIZED" ]; then
   echo ">> CONTAINER: starting initialisation"
-  
-  [ ! -d "/conf" ] && mkdir -p /conf
-  [ ! -d "/certs" ] && mkdir -p /certs
   
   ##
   # Diffie–Hellman Section
