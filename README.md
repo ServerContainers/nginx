@@ -3,9 +3,11 @@ _maintained by ServerContainers_
 
 ## Changelogs
 
+* 2021-04-11
+    * switched to `nginx-extras` debian package
 * 2020-11-17
     * switched to `debian:buster` baseimage
-    * switched to `nginx-full` debian package
+    * switched to `nginx-extras` debian package
     * fixed webdav support
     * fixed missing folders
 * 2020-11-05
@@ -20,7 +22,7 @@ _maintained by ServerContainers_
 
 This Dockerfile (available as ___servercontainers/nginx___) gives you a NGINX on alpine. It also generates self signed certificates and reverse proxy mechanism.
 
-It uses debian package `nginx-full`.
+It uses debian package `nginx-extras`.
 
 For Configuration of the Server you use environment Variables.
 
