@@ -30,7 +30,7 @@ RUN export DEBIAN_FRONTEND=noninteractive \
  && wget -O /iana-tlds.txt "http://data.iana.org/TLD/tlds-alpha-by-domain.txt" \
  \
  \
- && openssl dhparam -out /etc/nginx/dh.pem 4096 \
+ && openssl dhparam -out /etc/nginx/dh.pem 2048 \
  && mkdir -p /conf /certs /data
 
 EXPOSE 80 443

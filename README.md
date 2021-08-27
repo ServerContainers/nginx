@@ -3,6 +3,9 @@ _maintained by ServerContainers_
 
 ## Changelogs
 
+* 2021-08-27
+    * decreased DH\_Size from `4096` to `2048` to decrease build time
+    * removed old outdated multi arch build - switched to `buildx`
 * 2021-04-11
     * switched to `nginx-extras` debian package
 * 2020-11-17
@@ -95,7 +98,7 @@ to enable authentication add the following to your nginx config _(inside or outs
 All options for the OpenSSL Stuff
 
 * __DH\_SIZE__
-    * no default - needed only if you don't trust my shipped 4096 version.
+    * no default - needed only if you don't trust my shipped 2048 version.
     * if set a new one with given size is generated
     * only use a number as value
 
