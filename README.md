@@ -1,8 +1,23 @@
 # Docker production ready NGINX Container (servercontainers/nginx)
 _maintained by ServerContainers_
 
+## Versioning
+
+You'll find all images tagged like `d11.2-ne1.18.0-6.1` which means `d<debian version>-ne<nginx-extras version (with some esacped chars)>`.
+This way you can pin your installation/configuration to a certian version. or easily roll back if you experience any problems
+(don't forget to open a issue in that case ;D).
+
+The `latest` version will be updated/released after I managed to test a new pinned version in my production environment.
+This way I can easily find and fix bugs without affecting any users. It will result in a way more stable container.
+
 ## Changelogs
 
+* 2022-01-08
+    * new build script
+    * version tagging
+    * update to debian `bullseye`
+    * rearranged folder structure of repo
+    * added `dh.pem` with `4096` size hardcoded into repo (zero impact on build-time)
 * 2021-08-27
     * decreased DH\_Size from `4096` to `2048` to decrease build time
     * removed old outdated multi arch build - switched to `buildx`
@@ -29,9 +44,9 @@ It uses debian package `nginx-extras`.
 
 For Configuration of the Server you use environment Variables.
 
-It's based on the [debian:buster](https://registry.hub.docker.com/_/debian:buster/) Image
+It's based on the [debian:bullseye](https://registry.hub.docker.com/_/debian/) Image
 
-View in Docker Registry [servercontainers/nginx](https://registry.hub.docker.com/u/servercontainers/nginx/)
+View in Docker Registry [servercontainers/nginx](https://hub.docker.com/r/servercontainers/nginx)
 
 View in GitHub [ServerContainers/nginx](https://github.com/ServerContainers/nginx)
 

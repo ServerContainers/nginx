@@ -1,4 +1,4 @@
-FROM debian:buster
+FROM debian:bullseye
 LABEL github.user="ServerContainers"
 
 ENV PATH="/container/scripts:${PATH}"
@@ -30,13 +30,13 @@ RUN export DEBIAN_FRONTEND=noninteractive \
  && wget -O /iana-tlds.txt "http://data.iana.org/TLD/tlds-alpha-by-domain.txt" \
  \
  \
- && openssl dhparam -out /etc/nginx/dh.pem 2048 \
  && mkdir -p /conf /certs /data
 
 EXPOSE 80 443
 
-COPY conf.d /etc/nginx/conf.d/
-COPY snippets /etc/nginx/snippets/
+COPY /config/nginx/dh4096.pem /etc/nginx/dh.pem
+COPY /config/nginx/conf.d /etc/nginx/conf.d/
+COPY /config/nginx/snippets /etc/nginx/snippets/
 
 COPY . /container/
 
