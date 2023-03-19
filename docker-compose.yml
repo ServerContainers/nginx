@@ -3,7 +3,7 @@ version: '3'
 services:
   nginx:
     build: .
-    image: servercontainers/nginx
+    image: nginx
     restart: always
     environment:
       NGINX_CONFIG_phpmyadmin: server {server_name localhost; proxy_ssl_verify off; location / {return 301 https://localhost/phpmyadmin/;} location /phpmyadmin {proxy_pass https://phpmyadmin/phpmyadmin;}}

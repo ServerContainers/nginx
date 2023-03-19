@@ -1,17 +1,21 @@
-# Docker production ready NGINX Container (servercontainers/nginx)
+# Docker production ready NGINX Container build yourself container
 _maintained by ServerContainers_
 
-## Versioning
+## Build & Variants
+
+You can specify `DOCKER_REGISTRY` environment variable (for example `my.registry.tld`)
+and use the build script to build the main container and it's variants for _x86_64, arm64 and arm_
 
 You'll find all images tagged like `d11.2-ne1.18.0-6.1` which means `d<debian version>-ne<nginx-extras version (with some esacped chars)>`.
 This way you can pin your installation/configuration to a certian version. or easily roll back if you experience any problems
 (don't forget to open a issue in that case ;D).
 
-The `latest` version will be updated/released after I managed to test a new pinned version in my production environment.
-This way I can easily find and fix bugs without affecting any users. It will result in a way more stable container.
+To build a `latest` tag run `./build.sh release`
 
 ## Changelogs
 
+* 2023-03-19
+    * switched from docker hub to a build-yourself container
 * 2022-01-08
     * new build script
     * version tagging
@@ -38,17 +42,13 @@ This way I can easily find and fix bugs without affecting any users. It will res
 
 ## What is it
 
-This Dockerfile (available as ___servercontainers/nginx___) gives you a NGINX on alpine. It also generates self signed certificates and reverse proxy mechanism.
+This Dockerfile (available as build yourself container) gives you a NGINX on alpine. It also generates self signed certificates and reverse proxy mechanism.
 
 It uses debian package `nginx-extras`.
 
 For Configuration of the Server you use environment Variables.
 
 It's based on the [debian:bullseye](https://registry.hub.docker.com/_/debian/) Image
-
-View in Docker Registry [servercontainers/nginx](https://hub.docker.com/r/servercontainers/nginx)
-
-View in GitHub [ServerContainers/nginx](https://github.com/ServerContainers/nginx)
 
 ## Usage
 
