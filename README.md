@@ -1,7 +1,7 @@
 # Docker production ready NGINX Container - (ghcr.io/servercontainers/nginx) [x86 + arm]
 _maintained by ServerContainers_
 
-## Build & Variants
+## Build & Versioning
 
 You can specify `DOCKER_REGISTRY` environment variable (for example `my.registry.tld`)
 and use the build script to build the main container and it's variants for _x86_64, arm64 and arm_
