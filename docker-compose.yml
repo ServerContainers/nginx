@@ -3,7 +3,7 @@ version: '3'
 services:
   nginx:
     build: .
-    image: nginx
+    image: ghcr.io/servercontainers/nginx
     restart: always
     environment:
       NGINX_CONFIG_phpmyadmin: server {server_name localhost; proxy_ssl_verify off; location / {return 301 https://localhost/phpmyadmin/;} location /phpmyadmin {proxy_pass https://phpmyadmin/phpmyadmin;}}
@@ -15,7 +15,7 @@ services:
       - web-test
 
   phpmyadmin:
-    image: marvambass/phpmyadmin
+    image: ghcr.io/servercontainers/phpmyadmin
     restart: always
     environment:
       PHPMYADMIN_MYSQL_HOST: mysql
@@ -24,7 +24,7 @@ services:
       - web-test
 
   mysql:
-    image: servercontainers/mysql
+    image: ghcr.io/servercontainers/mysql
     restart: always
     environment:
       ADMIN_USER: admin

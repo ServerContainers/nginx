@@ -1,4 +1,4 @@
-# Docker production ready NGINX Container build yourself container
+# Docker production ready NGINX Container - (ghcr.io/servercontainers/nginx) [x86 + arm]
 _maintained by ServerContainers_
 
 ## Build & Variants
@@ -14,6 +14,9 @@ To build a `latest` tag run `./build.sh release`
 
 ## Changelogs
 
+* 2023-03-20
+    * github action to build container
+    * implemented ghcr.io as new registry
 * 2023-03-19
     * switched from docker hub to a build-yourself container
 * 2022-01-08
@@ -49,6 +52,11 @@ It uses debian package `nginx-extras`.
 For Configuration of the Server you use environment Variables.
 
 It's based on the [debian:bullseye](https://registry.hub.docker.com/_/debian/) Image
+
+View in GitHub Registry [ghcr.io/servercontainers/nginx](https://ghcr.io/servercontainers/nginx)
+
+View in GitHub [ServerContainers/nginx](https://github.com/ServerContainers/nginx)
+
 
 ## Usage
 
