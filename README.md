@@ -51,7 +51,7 @@ It uses debian package `nginx-extras`.
 
 For Configuration of the Server you use environment Variables.
 
-It's based on the [debian:bullseye](https://registry.hub.docker.com/_/debian/) Image
+It's based on the [debian:trixie](https://registry.hub.docker.com/_/debian/) Image
 
 View in GitHub Registry [ghcr.io/servercontainers/nginx](https://ghcr.io/servercontainers/nginx)
 

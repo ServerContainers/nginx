@@ -1,4 +1,4 @@
-FROM debian:bullseye
+FROM debian:trixie
 LABEL github.user="ServerContainers"
 
 ENV PATH="/container/scripts:${PATH}"
@@ -23,6 +23,8 @@ RUN export DEBIAN_FRONTEND=noninteractive \
  \
  && sed -i 's/ssl_protocols.*//g' /etc/nginx/nginx.conf \
  && sed -i 's/ssl_prefer_server_ciphers.*//g' /etc/nginx/nginx.conf \
+ \
+ && sed -i '/server_tokens/d' /etc/nginx/nginx.conf \
  \
  && sed -i 's,include /etc/nginx/conf.d,include /conf/*.conf;\n        include /etc/nginx/conf.d,g' /etc/nginx/nginx.conf \
  \
